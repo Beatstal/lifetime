@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>Age Time Calculator – เว็บคำนวณอายุ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Prompt", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top left, #111827 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
+    }
+
+    .page-wrapper {
+      width: 100%;
+      max-width: 900px;
+      padding: 32px 18px 40px;
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #1f2937 0, #020617 55%);
+      border-radius: 26px;
+      padding: 26px 26px 24px;
+      box-shadow: 0 28px 80px rgba(0,0,0,0.75);
+      border: 1px solid #374151;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .header-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 999px;
+      margin: 0 auto 12px;
+      background: radial-gradient(circle at 30% 20%, #f97316, #ef4444);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 18px 50px rgba(248,113,113,0.6);
+      font-size: 34px;
+    }
+
+    .header-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: #f9fafb;
+    }
+
+    .header-subtitle {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 20px;
+      margin-top: 22px;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #e5e7eb;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      background: #020617;
+      border-radius: 12px;
+      border: 1px solid #4b5563;
+      padding: 9px 11px;
+      font-size: 14px;
+      color: #f9fafb;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 1px rgba(249,115,22,0.6);
+      background: #020617;
+    }
+
+    .field-group {
+      margin-bottom: 14px;
+    }
+
+    .inline-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .radio-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 7px 10px;
+      border: 1px solid #4b5563;
+      font-size: 13px;
+      color: #d1d5db;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      background: linear-gradient(135deg, rgba(31,41,55,0.95), rgba(15,23,42,0.95));
+    }
+
+    .radio-pill input {
+      accent-color: #f97316;
+    }
+
+    .radio-pill:hover {
+      border-color: #f97316;
+      box-shadow: 0 0 0 1px rgba(249,115,22,0.4);
+    }
+
+    .btn-primary {
+      margin-top: 10px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      color: #f9fafb;
+      box-shadow: 0 16px 40px rgba(248,113,113,0.6);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 20px 55px rgba(248,113,113,0.9);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 30px rgba(248,113,113,0.7);
+    }
+
+    .result-card {
+      background: radial-gradient(circle at top right, rgba(55,65,81,0.8), rgba(15,23,42,0.98));
+      border-radius: 20px;
+      padding: 16px 16px 14px;
+      border: 1px solid #4b5563;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.9);
+    }
+
+    .result-main {
+      font-size: 22px;
+      font-weight: 700;
+      color: #f9fafb;
+      margin-bottom: 4px;
+    }
+
+    .result-sub {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+
+    .result-highlight {
+      font-size: 15px;
+      color: #fed7aa;
+    }
+
+    .result-extra {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(17,24,39,0.9);
+      border: 1px solid rgba(249,115,22,0.6);
+      color: #fed7aa;
+      margin-bottom: 6px;
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: #fecaca;
+      margin-top: 4px;
+      min-height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="card">
+      <header class="header">
+        <div class="header-icon">⏳</div>
+        <h1 class="header-title">Age Time Calculator</h1>
+        <p class="header-subtitle">คำนวณเวลาในชีวิตของคุณเป็นปี เดือน วัน ชั่วโมง นาที หรือวินาที</p>
+      </header>
+
+      <div class="grid">
+        <!-- LEFT: FORM -->
+        <section>
+          <h2 class="section-title">กรอกข้อมูล</h2>
+
+          <div class="field-group">
+            <label for="current-age">อายุปัจจุบันของคุณ (ปี)</label>
+            <input id="current-age" type="number" min="0" max="150" placeholder="เช่น 20" />
+          </div>
+
+          <div class="field-group">
+            <label for="target-age">อายุที่คาดว่าจะมีชีวิตอยู่ถึง (ปี)</label>
+            <input id="target-age" type="number" min="1" max="150" value="80" />
+            <div style="font-size:11px;color:#6b7280;margin-top:4px;">
+              ใช้สำหรับโหมด “เวลาที่เหลืออยู่” (ค่าเริ่มต้น 80 ปี ปรับได้ตามใจคุณ)
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>เลือกโหมดการคำนวณ</label>
+            <div class="inline-group">
+              <label class="radio-pill">
+                <input type="radio" name="mode" value="lived" checked />
+                <span>เราเกิดมาแล้วเป็นเวลานานเท่าไร</span>
+              </label>
+              <label class="radio-pill">
+                <input type="radio" name="mode" value="remaining" />
+                <span>เราน่าจะมีเวลาเหลืออีกเท่าไร</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="unit-select">หน่วยที่ต้องการแสดงผล</label>
+            <select id="unit-select">
+              <option value="years">ปี</option>
+              <option value="months">เดือน</option>
+              <option value="days">วัน</option>
+              <option value="hours">ชั่วโมง</option>
+              <option value="minutes">นาที</option>
+              <option value="seconds">วินาที</option>
+            </select>
+          </div>
+
+          <button class="btn-primary" id="calc-btn">
+            คำนวณเลย
+            <span>→</span>
+          </button>
+
+          <div id="error" class="error-msg"></div>
+        </section>
+
+        <!-- RIGHT: RESULT -->
+        <section>
+          <h2 class="section-title">ผลลัพธ์</h2>
+          <div class="result-card">
+            <div class="badge" id="mode-badge">เลือกโหมดและกรอกข้อมูลก่อน</div>
+            <div class="result-main" id="result-main">ยังไม่มีการคำนวณ</div>
+            <div class="result-sub" id="result-sub">
+              กรอกอายุของคุณ แล้วกดปุ่ม “คำนวณเลย” เพื่อดูเวลาในชีวิตของคุณในรูปแบบต่าง ๆ
+            </div>
+            <div class="result-highlight" id="result-highlight"></div>
+            <div class="result-extra" id="result-extra">
+              การคำนวณนี้เป็นการประมาณแบบง่าย ๆ (นับ 1 ปี = 365 วัน) เพื่อใช้เพื่อการทดลอง/เรียนรู้เท่านั้น
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const currentAgeInput = document.getElementById("current-age");
+    const targetAgeInput = document.getElementById("target-age");
+    const unitSelect = document.getElementById("unit-select");
+    const calcBtn = document.getElementById("calc-btn");
+    const errorEl = document.getElementById("error");
+
+    const modeBadge = document.getElementById("mode-badge");
+    const resultMain = document.getElementById("result-main");
+    const resultSub = document.getElementById("result-sub");
+    const resultHighlight = document.getElementById("result-highlight");
+    const resultExtra = document.getElementById("result-extra");
+
+    function getSelectedMode() {
+      const radios = document.querySelectorAll('input[name="mode"]');
+      for (const r of radios) {
+        if (r.checked) return r.value;
+      }
+      return "lived";
+    }
+
+    function formatNumber(n) {
+      return n.toLocaleString("th-TH");
+    }
+
+    function unitLabel(unit) {
+      switch (unit) {
+        case "years": return "ปี";
+        case "months": return "เดือน";
+        case "days": return "วัน";
+        case "hours": return "ชั่วโมง";
+        case "minutes": return "นาที";
+        case "seconds": return "วินาที";
+        default: return "";
+      }
+    }
+
+    function calculate() {
+      errorEl.textContent = "";
+
+      const age = parseFloat(currentAgeInput.value);
+      const target = parseFloat(targetAgeInput.value);
+      const mode = getSelectedMode();
+      const unit = unitSelect.value;
+
+      if (isNaN(age) || age < 0) {
+        errorEl.textContent = "กรุณากรอกอายุปัจจุบันให้ถูกต้อง (0–150 ปี)";
+        return;
+      }
+      if (age > 150) {
+        errorEl.textContent = "อายุเกินช่วงที่รองรับ (0–150 ปี)";
+        return;
+      }
+
+      if (mode === "remaining") {
+        if (isNaN(target) || target <= 0) {
+          errorEl.textContent = "กรุณากรอกอายุที่คาดว่าจะมีชีวิตถึงให้ถูกต้อง";
+          return;
+        }
+      }
+
+      let yearsBase;
+      let headline;
+      let badgeText;
+
+      if (mode === "lived") {
+        yearsBase = age;
+        headline = "เวลาในชีวิตที่คุณได้ใช้มาแล้ว";
+        badgeText = "โหมด: เวลา ที่ผ่านมา";
+      } else {
+        yearsBase = target - age;
+        badgeText = "โหมด: เวลา ที่เหลือ (ประมาณ)";
+        if (yearsBase < 0) {
+          yearsBase = Math.abs(yearsBase);
+          headline = "คุณมีอายุมากกว่าเป้าหมายที่ตั้งไว้แล้ว";
+        } else {
+          headline = "เวลาที่คุณอาจจะมีเหลืออยู่ (ประมาณ)";
+        }
+      }
+
+      // แปลงหน่วย
+      const days = yearsBase * 365;
+      const months = yearsBase * 12;
+      const hours = days * 24;
+      const minutes = hours * 60;
+      const seconds = minutes * 60;
+
+      let mainValue;
+      switch (unit) {
+        case "years": mainValue = yearsBase; break;
+        case "months": mainValue = months; break;
+        case "days": mainValue = days; break;
+        case "hours": mainValue = hours; break;
+        case "minutes": mainValue = minutes; break;
+        case "seconds": mainValue = seconds; break;
+        default: mainValue = yearsBase;
+      }
+
+      const roundedMain = Math.round(mainValue);
+      const unitText = unitLabel(unit);
+
+      modeBadge.textContent = badgeText;
+      resultMain.textContent = `${formatNumber(roundedMain)} ${unitText}`;
+      resultSub.textContent = headline;
+
+      if (mode === "lived") {
+        resultHighlight.textContent =
+          `ถ้าคิดเป็นวัน คุณใช้ชีวิตมาประมาณ ${formatNumber(Math.round(days))} วันแล้ว 🤍`;
+      } else {
+        if (target - age < 0) {
+          resultHighlight.textContent =
+            `คุณมีอายุมากกว่าเป้าหมายที่ตั้งไว้ประมาณ ${formatNumber(Math.round(yearsBase))} ปีแล้ว ถือว่าเก่งมากเลย ✨`;
+        } else {
+          resultHighlight.textContent =
+            `ถ้าถึงอายุประมาณ ${formatNumber(target)} ปี คุณยังมีเวลาประมาณ ${formatNumber(Math.round(days))} วันให้ใช้ให้คุ้มค่า 🌙`;
+        }
+      }
+
+      resultExtra.textContent =
+        "การคำนวณนี้ใช้ค่าโดยประมาณ 1 ปี = 365 วัน (ไม่ได้คิดปีอธิกสุรทิน) ใช้เพื่อการทดลองและเรียนรู้เกี่ยวกับเวลาในชีวิตของเราเท่านั้น 🙂";
+    }
+
+    calcBtn.addEventListener("click", calculate);
+
+    // ให้กด Enter ในช่องกรอกอายุแล้วคำนวณได้เลย
+    currentAgeInput.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") calculate();
+    });
+    targetAgeInput.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") calculate();
+    });
+  </script>
+</body>
+</html>
