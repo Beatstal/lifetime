@@ -2,14 +2,14 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>BMI Checker – เว็บเช็คค่า BMI และคำแนะนำสุขภาพ</title>
+  <title>Age Time – เครื่องคำนวณอายุแบบง่าย</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Prompt", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
@@ -17,643 +17,431 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: radial-gradient(circle at top left, #022c22 0, #064e3b 35%, #022c22 65%, #01120f 100%);
-      color: #e5f9f2;
+      background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
     }
 
-    .page-wrapper {
+    .page {
       width: 100%;
-      max-width: 1100px;
-      padding: 30px 18px 40px;
+      max-width: 720px;
+      padding: 24px 16px 32px;
     }
 
     .card {
-      background: radial-gradient(circle at top left, rgba(15,118,110,0.9), rgba(6,78,59,0.97));
+      background: radial-gradient(circle at top left, #111827 0, #020617 60%);
       border-radius: 26px;
-      padding: 26px 26px 24px;
-      box-shadow: 0 26px 70px rgba(0,0,0,0.9);
-      border: 1px solid rgba(16,185,129,0.35);
+      padding: 22px 20px 20px;
+      border: 1px solid #374151;
+      box-shadow: 0 32px 90px rgba(0,0,0,0.85);
     }
 
     .header {
       text-align: center;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
 
-    .header-icon {
-      width: 74px;
-      height: 74px;
+    .icon {
+      width: 70px;
+      height: 70px;
       border-radius: 999px;
-      margin: 0 auto 12px;
-      background: radial-gradient(circle at 30% 20%, #34d399, #22c55e);
+      margin: 0 auto 8px;
+      background: radial-gradient(circle at 30% 20%, #4b5563, #111827);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 34px;
-      color: #022c22;
-      box-shadow: 0 20px 50px rgba(34,197,94,0.8);
+      font-size: 32px;
+      box-shadow: 0 20px 50px rgba(15,23,42,0.9);
     }
 
-    .header-title {
-      font-size: 26px;
+    .title {
+      font-size: 22px;
       font-weight: 700;
-      color: #ecfdf3;
+      color: #f9fafb;
     }
 
-    .header-subtitle {
+    .subtitle {
       margin-top: 4px;
-      font-size: 13px;
-      color: #bbf7d0;
+      font-size: 12px;
+      color: #9ca3af;
     }
 
-    .grid {
+    .layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.1fr);
-      gap: 22px;
-      margin-top: 22px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 18px;
+      margin-top: 12px;
     }
 
-    @media (max-width: 900px) {
-      .grid {
+    @media (max-width: 780px) {
+      .layout {
         grid-template-columns: minmax(0, 1fr);
       }
     }
 
-    .section-title {
-      font-size: 15px;
+    .panel {
+      background: rgba(15,23,42,0.9);
+      border-radius: 20px;
+      border: 1px solid #1f2937;
+      padding: 14px 14px 12px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.9);
+    }
+
+    .panel-title {
+      font-size: 14px;
       font-weight: 600;
+      margin-bottom: 8px;
+      color: #f9fafb;
+    }
+
+    .form-group {
       margin-bottom: 10px;
-      color: #ecfdf3;
+      font-size: 13px;
     }
 
     label {
       display: block;
-      font-size: 13px;
-      color: #d1fae5;
       margin-bottom: 4px;
+      color: #d1d5db;
     }
 
-    input[type="number"],
+    .input,
     select {
       width: 100%;
-      background: rgba(4, 24, 20, 0.95);
-      border-radius: 12px;
-      border: 1px solid rgba(45,212,191,0.55);
-      padding: 9px 11px;
-      font-size: 14px;
-      color: #ecfdf3;
+      border-radius: 10px;
+      border: 1px solid #4b5563;
+      padding: 6px 9px;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 13px;
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
 
-    input[type="number"]:focus,
+    .input:focus,
     select:focus {
-      border-color: #4ade80;
-      box-shadow: 0 0 0 1px rgba(74,222,128,0.8);
-      background: #022c22;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 1px rgba(99,102,241,0.8);
     }
 
-    .field-group {
-      margin-bottom: 14px;
+    .radio-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .helper {
-      font-size: 11px;
-      color: #a7f3d0;
-      margin-top: 3px;
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .radio-item input {
+      accent-color: #6366f1;
+    }
+
+    .inline {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .inline span {
+      font-size: 12px;
+      color: #9ca3af;
     }
 
     .btn-row {
       display: flex;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 8px;
       flex-wrap: wrap;
     }
 
     .btn {
-      padding: 9px 16px;
       border-radius: 999px;
       border: none;
-      font-size: 14px;
-      font-weight: 600;
+      padding: 7px 14px;
+      font-size: 13px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      font-weight: 600;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #022c22;
-      box-shadow: 0 18px 40px rgba(34,197,94,0.8);
-      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+      background: linear-gradient(135deg, #6366f1, #312e81);
+      color: #e5e7eb;
+      box-shadow: 0 15px 35px rgba(79,70,229,0.9);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
     }
 
     .btn-primary:hover {
       transform: translateY(-1px);
       filter: brightness(1.05);
-      box-shadow: 0 22px 60px rgba(22,163,74,0.95);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow: 0 12px 30px rgba(22,163,74,0.85);
+      box-shadow: 0 20px 45px rgba(55,65,194,1);
     }
 
     .btn-secondary {
-      background: rgba(4,120,87,0.4);
-      color: #a7f3d0;
-      border: 1px solid rgba(45,212,191,0.6);
+      background: #111827;
+      color: #9ca3af;
+      border: 1px solid #4b5563;
     }
 
-    .btn-secondary:hover {
-      background: rgba(15,118,110,0.9);
-    }
-
-    .error-msg {
+    .error {
+      margin-top: 6px;
       font-size: 12px;
-      color: #fecaca;
-      margin-top: 4px;
+      color: #fca5a5;
       min-height: 16px;
     }
 
-    /* RESULT AREA */
-    .result-card {
-      background: radial-gradient(circle at top right, rgba(4,120,87,0.9), rgba(6,46,37,0.98));
-      border-radius: 20px;
-      padding: 16px 18px 16px;
-      border: 1px solid rgba(45,212,191,0.6);
-      box-shadow: 0 22px 50px rgba(0,0,0,0.85);
+    /* Result */
+    .result-main {
+      background: radial-gradient(circle at top left, #111827, #020617);
+      border-radius: 18px;
+      padding: 12px 12px 10px;
+      border: 1px solid #1f2937;
     }
 
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      margin-bottom: 6px;
-      background: rgba(6, 95, 70, 0.95);
-      border: 1px solid rgba(16,185,129,0.9);
-      color: #bbf7d0;
-    }
-
-    .bmi-value {
-      font-size: 26px;
-      font-weight: 800;
-      margin-bottom: 2px;
-    }
-
-    .bmi-label {
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    .bmi-status {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .bmi-status span {
-      font-weight: 700;
-    }
-
-    .advice {
+    .result-label {
       font-size: 13px;
-      color: #d1fae5;
-      line-height: 1.6;
+      color: #9ca3af;
     }
 
-    .advice ul {
-      margin-left: 18px;
+    .result-value {
       margin-top: 4px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #facc15;
     }
 
-    .advice li {
-      margin-bottom: 2px;
-    }
-
-    /* SCALE BAR / CHART */
-    .scale-wrapper {
-      margin-top: 14px;
-    }
-
-    .scale-label {
+    .result-extra {
+      margin-top: 6px;
       font-size: 12px;
-      color: #a7f3d0;
-      margin-bottom: 4px;
+      color: #9ca3af;
+      line-height: 1.5;
     }
 
-    .scale-bar {
-      position: relative;
-      height: 16px;
-      border-radius: 999px;
-      overflow: hidden;
-      display: flex;
-      box-shadow: inset 0 0 0 1px rgba(15,118,110,0.9);
-    }
-
-    .scale-segment {
-      flex: 1;
+    .tip {
+      margin-top: 8px;
       font-size: 11px;
-      text-align: center;
-      line-height: 16px;
-      color: #022c22;
-      font-weight: 600;
-      text-shadow: 0 1px 3px rgba(15,23,42,0.7);
+      color: #6b7280;
     }
-
-    .seg-under { background: #6ee7b7; }
-    .seg-normal { background: #22c55e; }
-    .seg-risk { background: #eab308; }
-    .seg-obese1 { background: #fb923c; }
-    .seg-obese2 { background: #ef4444; }
-
-    .scale-marker {
-      position: absolute;
-      top: -3px;
-      width: 0;
-      height: 22px;
-      border-left: 2px solid #ecfeff;
-      filter: drop-shadow(0 0 4px rgba(240,253,250,0.9));
-    }
-
-    .scale-marker-dot {
-      position: absolute;
-      top: 12px;
-      left: -4px;
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #ecfeff;
-    }
-
-    .scale-minmax {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: #a7f3d0;
-      margin-top: 3px;
-    }
-
-    /* TABLE CHART */
-    .table-wrapper {
-      margin-top: 14px;
-      background: rgba(15,118,110,0.7);
-      border-radius: 16px;
-      border: 1px solid rgba(16,185,129,0.7);
-      overflow: hidden;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-
-    th, td {
-      padding: 6px 8px;
-      text-align: left;
-    }
-
-    th {
-      background: rgba(6,95,70,0.95);
-      color: #bbf7d0;
-    }
-
-    tr:nth-child(even) td {
-      background: rgba(5,46,38,0.8);
-    }
-
-    tr:nth-child(odd) td {
-      background: rgba(6,78,59,0.8);
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 2px 7px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #022c22;
-    }
-
-    .tag-under { background: #6ee7b7; }
-    .tag-normal { background: #22c55e; }
-    .tag-risk { background: #eab308; }
-    .tag-obese1 { background: #fb923c; }
-    .tag-obese2 { background: #ef4444; }
   </style>
 </head>
 <body>
-  <div class="page-wrapper">
+  <div class="page">
     <div class="card">
       <header class="header">
-        <div class="header-icon">🩺</div>
-        <h1 class="header-title">BMI Checker</h1>
-        <p class="header-subtitle">เช็คค่า BMI ของคุณ พร้อมคำแนะนำสุขภาพ และแผนภูมิช่วงค่ามาตรฐาน</p>
+        <div class="icon">⏳</div>
+        <h1 class="title">Age Time – เครื่องคำนวณอายุ</h1>
+        <p class="subtitle">
+          เลือกวันเกิด แล้วดูว่าเราอยู่มาแล้วกี่ปี / วัน หรือเหลืออีกกี่ปีถึงอายุเป้าหมาย แบบคำนวณง่าย ๆ ไม่เล่นของซับซ้อนให้เสี่ยงบัค
+        </p>
       </header>
 
-      <div class="grid">
-        <!-- LEFT : FORM -->
-        <section>
-          <h2 class="section-title">กรอกข้อมูลของคุณ</h2>
+      <div class="layout">
+        <!-- LEFT: FORM -->
+        <section class="panel">
+          <div class="panel-title">ข้อมูลของผม</div>
+          <form id="ageForm">
+            <div class="form-group">
+              <label for="dob">วันเกิด</label>
+              <input type="date" id="dob" class="input" />
+            </div>
 
-          <div class="field-group">
-            <label for="height">ส่วนสูง (เซนติเมตร)</label>
-            <input id="height" type="number" min="100" max="250" placeholder="เช่น 170" />
-            <div class="helper">ใช้หน่วยเซนติเมตร เช่น 160, 170</div>
-          </div>
+            <div class="form-group">
+              <label>โหมดการคำนวณ</label>
+              <div class="radio-row">
+                <label class="radio-item">
+                  <input type="radio" name="mode" value="lived" checked />
+                  ดูเวลาที่ผมมีชีวิตอยู่แล้ว
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="mode" value="remaining" />
+                  ดูเวลาที่ยังเหลือจนถึงอายุเป้าหมาย
+                </label>
+              </div>
+            </div>
 
-          <div class="field-group">
-            <label for="weight">น้ำหนัก (กิโลกรัม)</label>
-            <input id="weight" type="number" min="20" max="250" step="0.1" placeholder="เช่น 60.5" />
-            <div class="helper">ใช้หน่วยกิโลกรัม เช่น 55, 63.2</div>
-          </div>
+            <div class="form-group">
+              <label for="targetAge">อายุเป้าหมาย (ใช้เมื่อเลือกโหมด “ยังเหลือ”)</label>
+              <div class="inline">
+                <input
+                  type="number"
+                  id="targetAge"
+                  class="input"
+                  min="1"
+                  max="120"
+                  value="80"
+                  style="max-width:120px;"
+                />
+                <span>ปี (ถ้าไม่ได้กรอก จะใช้ 80 ปีเป็นค่าเริ่มต้น)</span>
+              </div>
+            </div>
 
-          <div class="field-group">
-            <label for="activity">ระดับการเคลื่อนไหวในชีวิตประจำวัน (เพื่อใช้ช่วยแนะนำ)</label>
-            <select id="activity">
-              <option value="low">นั่งทำงานเป็นหลัก / แทบไม่ออกกำลัง</option>
-              <option value="medium" selected>เคลื่อนไหวปานกลาง / ออกกำลังกาย 1–3 วันต่อสัปดาห์</option>
-              <option value="high">ออกกำลังกายสม่ำเสมอ 4 วันต่อสัปดาห์ขึ้นไป</option>
-            </select>
-          </div>
+            <div class="form-group">
+              <label for="unit">อยากให้แสดงผลเป็นหน่วยอะไร</label>
+              <select id="unit">
+                <option value="years">ปี (ทศนิยม)</option>
+                <option value="days">วัน</option>
+                <option value="hours">ชั่วโมง</option>
+                <option value="minutes">นาที</option>
+                <option value="seconds">วินาที</option>
+              </select>
+            </div>
 
-          <div class="btn-row">
-            <button class="btn btn-primary" id="calc-btn">
-              คำนวณ BMI
-              <span>→</span>
-            </button>
-            <button class="btn btn-secondary" id="reset-btn">
-              ล้างค่า
-            </button>
-          </div>
+            <div class="btn-row">
+              <button type="submit" class="btn btn-primary">คำนวณ</button>
+              <button type="button" id="clearBtn" class="btn btn-secondary">ล้างค่า</button>
+            </div>
 
-          <div id="error" class="error-msg"></div>
-
-          <div class="helper" style="margin-top:10px;">
-            * การคำนวณ BMI เป็นเพียงค่าประมาณ ไม่สามารถใช้แทนคำวินิจฉัยจากแพทย์หรือผู้เชี่ยวชาญได้
-          </div>
+            <div id="error" class="error"></div>
+          </form>
         </section>
 
-        <!-- RIGHT : RESULT & CHART -->
-        <section>
-          <h2 class="section-title">ผลลัพธ์ & คำแนะนำ</h2>
-
-          <div class="result-card">
-            <div class="badge" id="badge">กรอกข้อมูลแล้วกด “คำนวณ BMI”</div>
-            <div class="bmi-value" id="bmi-value">--</div>
-            <div class="bmi-label" id="bmi-label">ยังไม่มีการคำนวณ</div>
-            <div class="bmi-status" id="bmi-status"></div>
-
-            <div class="advice" id="advice">
-              เมื่อคำนวณแล้ว ระบบจะแสดงคำแนะนำเบื้องต้นตามระดับ BMI และระดับการเคลื่อนไหวของคุณ
-            </div>
-
-            <!-- SCALE BAR -->
-            <div class="scale-wrapper">
-              <div class="scale-label">ตำแหน่งของคุณบนช่วงค่า BMI (ตามเกณฑ์ประเทศไทย)</div>
-              <div class="scale-bar" id="scale-bar">
-                <div class="scale-segment seg-under">ผอม</div>
-                <div class="scale-segment seg-normal">สมส่วน</div>
-                <div class="scale-segment seg-risk">ท้วม</div>
-                <div class="scale-segment seg-obese1">อ้วนระดับ 1</div>
-                <div class="scale-segment seg-obese2">อ้วนระดับ 2</div>
-                <div class="scale-marker" id="scale-marker">
-                  <div class="scale-marker-dot"></div>
-                </div>
-              </div>
-              <div class="scale-minmax">
-                <span>&lt; 18.5</span>
-                <span>18.5</span>
-                <span>23</span>
-                <span>25</span>
-                <span>30</span>
-                <span>&gt;= 35+</span>
-              </div>
-            </div>
-
-            <!-- TABLE CHART -->
-            <div class="table-wrapper" style="margin-top:14px;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>ช่วงค่า BMI</th>
-                    <th>ระดับ</th>
-                    <th>ความหมายโดยย่อ</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>&lt; 18.5</td>
-                    <td><span class="tag tag-under">ผอม</span></td>
-                    <td>น้ำหนักน้อยกว่ามาตรฐาน เสี่ยงขาดสารอาหาร กล้ามเนื้อน้อย ภูมิคุ้มกันลดลง</td>
-                  </tr>
-                  <tr>
-                    <td>18.5 – 22.9</td>
-                    <td><span class="tag tag-normal">สมส่วน</span></td>
-                    <td>น้ำหนักเหมาะสมที่สุด ลดความเสี่ยงโรคหัวใจ เบาหวาน และความดัน</td>
-                  </tr>
-                  <tr>
-                    <td>23 – 24.9</td>
-                    <td><span class="tag tag-risk">ท้วม (เสี่ยงต่อโรค)</span></td>
-                    <td>เริ่มมีไขมันส่วนเกิน ควรปรับพฤติกรรมการกินและการออกกำลังกาย</td>
-                  </tr>
-                  <tr>
-                    <td>25 – 29.9</td>
-                    <td><span class="tag tag-obese1">อ้วน ระดับ 1</span></td>
-                    <td>เสี่ยงโรคไม่ติดต่อเพิ่มขึ้น เช่น เบาหวาน ความดัน ไขมันในเลือดสูง</td>
-                  </tr>
-                  <tr>
-                    <td>&gt;= 30</td>
-                    <td><span class="tag tag-obese2">อ้วน ระดับ 2</span></td>
-                    <td>เสี่ยงโรคแทรกซ้อนสูงมาก ควรปรึกษาแพทย์หรือผู้เชี่ยวชาญ</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
+        <!-- RIGHT: RESULT -->
+        <section class="panel result-main">
+          <div class="panel-title">ผลลัพธ์</div>
+          <div class="result-label" id="resultLabel">ยังไม่มีการคำนวณ</div>
+          <div class="result-value" id="resultValue">--</div>
+          <div class="result-extra" id="resultExtra">
+            กรอกข้อมูลด้านซ้ายแล้วกดปุ่ม "คำนวณ" เพื่อดูผล
           </div>
+          <p class="tip">
+            การคำนวณนี้ใช้ค่าเฉลี่ย 1 ปี ≈ 365.25 วัน เพื่อให้โค้ดอ่านง่ายและลดโอกาสเจอปัญหาเรื่องโซนเวลา / ปีอธิกสุรทินครับ
+          </p>
         </section>
       </div>
     </div>
   </div>
 
   <script>
-    const heightInput = document.getElementById("height");
-    const weightInput = document.getElementById("weight");
-    const activitySelect = document.getElementById("activity");
-    const calcBtn = document.getElementById("calc-btn");
-    const resetBtn = document.getElementById("reset-btn");
+    const MS_SECOND = 1000;
+    const MS_MINUTE = 60 * MS_SECOND;
+    const MS_HOUR   = 60 * MS_MINUTE;
+    const MS_DAY    = 24 * MS_HOUR;
+    const MS_YEAR   = 365.25 * MS_DAY; // เอาค่าเฉลี่ยง่าย ๆ พอ
+
+    const form = document.getElementById("ageForm");
+    const dobInput = document.getElementById("dob");
+    const targetAgeInput = document.getElementById("targetAge");
+    const unitSelect = document.getElementById("unit");
     const errorEl = document.getElementById("error");
 
-    const badgeEl = document.getElementById("badge");
-    const bmiValueEl = document.getElementById("bmi-value");
-    const bmiLabelEl = document.getElementById("bmi-label");
-    const bmiStatusEl = document.getElementById("bmi-status");
-    const adviceEl = document.getElementById("advice");
+    const resultLabelEl = document.getElementById("resultLabel");
+    const resultValueEl = document.getElementById("resultValue");
+    const resultExtraEl = document.getElementById("resultExtra");
+    const clearBtn = document.getElementById("clearBtn");
 
-    const markerEl = document.getElementById("scale-marker");
-    const scaleBarEl = document.getElementById("scale-bar");
-
-    function formatNumber(n, digits = 1) {
-      return n.toLocaleString("th-TH", {
-        minimumFractionDigits: digits,
-        maximumFractionDigits: digits
-      });
+    function formatNumber(n) {
+      return n.toLocaleString("th-TH", { maximumFractionDigits: 2 });
     }
 
-    function getBMICategory(bmi) {
-      // เกณฑ์ไทย
-      if (bmi < 18.5) {
-        return {
-          key: "under",
-          text: "ผอม (น้ำหนักต่ำกว่าเกณฑ์)",
-          color: "#6ee7b7"
-        };
-      } else if (bmi < 23) {
-        return {
-          key: "normal",
-          text: "สมส่วน (น้ำหนักปกติ)",
-          color: "#22c55e"
-        };
-      } else if (bmi < 25) {
-        return {
-          key: "risk",
-          text: "ท้วม (เริ่มเสี่ยงต่อโรค)",
-          color: "#eab308"
-        };
-      } else if (bmi < 30) {
-        return {
-          key: "obese1",
-          text: "อ้วน ระดับ 1",
-          color: "#fb923c"
-        };
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      errorEl.textContent = "";
+
+      const dobValue = dobInput.value;
+      if (!dobValue) {
+        errorEl.textContent = "กรุณาเลือกวันเกิดก่อนครับ";
+        return;
+      }
+
+      const dob = new Date(dobValue + "T00:00:00");
+      const now = new Date();
+
+      if (dob > now) {
+        errorEl.textContent = "วันเกิดต้องไม่อยู่ในอนาคตนะครับ";
+        return;
+      }
+
+      const diffMs = now.getTime() - dob.getTime();
+      const mode = (document.querySelector("input[name='mode']:checked") || {}).value || "lived";
+      const unit = unitSelect.value;
+
+      let baseMs;
+      let label;
+      let extra;
+
+      if (mode === "lived") {
+        baseMs = diffMs;
+        label = "ผมมีชีวิตอยู่แล้วประมาณ";
+        const yearsApprox = diffMs / MS_YEAR;
+        extra =
+          "อายุโดยประมาณตอนนี้ ~ " +
+          formatNumber(yearsApprox) +
+          " ปี (ตามสูตร 1 ปี = 365.25 วัน)";
       } else {
-        return {
-          key: "obese2",
-          text: "อ้วน ระดับ 2",
-          color: "#ef4444"
-        };
-      }
-    }
+        // remaining
+        let targetAge = parseFloat(targetAgeInput.value);
+        if (isNaN(targetAge) || targetAge <= 0) {
+          targetAge = 80; // default safe
+        }
+        const targetTotalMs = targetAge * MS_YEAR;
+        const remainingMs = targetTotalMs - diffMs;
 
-    function createAdvice(categoryKey, activity) {
-      const tips = [];
-
-      if (categoryKey === "under") {
-        tips.push("เพิ่มพลังงานจากอาหารที่มีประโยชน์ เช่น ข้าวกล้อง ถั่ว ไข่ ปลา นม ไม่เน้นขนมหวานและน้ำตาลสูงเพียงอย่างเดียว.");
-        tips.push("เสริมการออกกำลังกายแบบเวทเทรนนิงหรือใช้แรงต้าน เพื่อเพิ่มมวลกล้ามเนื้อ.");
-        tips.push("ถ้ารู้สึกน้ำหนักลดลงผิดปกติ หรืออ่อนเพลียง่าย ควรปรึกษาแพทย์.");
-      } else if (categoryKey === "normal") {
-        tips.push("ถือว่าดีมาก! พยายามรักษาน้ำหนักใกล้เคียงเดิม ด้วยการกินให้ครบ 5 หมู่และไม่อดอาหาร.");
-        tips.push("ออกกำลังกายสม่ำเสมออย่างน้อย 150 นาที/สัปดาห์ เช่น เดินเร็ว วิ่งเบา หรือปั่นจักรยาน.");
-        tips.push("พักผ่อนให้เพียงพอ 7–9 ชั่วโมงต่อคืน และดื่มน้ำให้พอเหมาะ.");
-      } else if (categoryKey === "risk") {
-        tips.push("ลดอาหารทอดมัน ของหวาน น้ำอัดลม และเครื่องดื่มหวานต่าง ๆ.");
-        tips.push("เพิ่มผักผลไม้ และอาหารที่มีกากใยสูง จะช่วยให้อิ่มนานและคุมพลังงานได้ดี.");
-        tips.push("ตั้งเป้าให้น้ำหนักลดอย่างช้า ๆ ประมาณ 0.25–0.5 กก./สัปดาห์.");
-      } else if (categoryKey === "obese1" || categoryKey === "obese2") {
-        tips.push("วางแผนลดน้ำหนักร่วมกับการควบคุมอาหารและการออกกำลังกาย หากเป็นไปได้ควรมีผู้เชี่ยวชาญช่วยดูแล.");
-        tips.push("หลีกเลี่ยงอาหารแปรรูป น้ำตาลสูง และลดปริมาณเครื่องดื่มหวาน/แอลกอฮอล์.");
-        tips.push("หากมีอาการเหนื่อยง่าย แน่นหน้าอก ปวดเข่าหรือข้อ ควรปรึกษาแพทย์ก่อนเริ่มออกกำลังกายหนัก.");
+        if (remainingMs <= 0) {
+          baseMs = 0;
+          label = "ผมเลยอายุเป้าหมายที่ตั้งไว้แล้ว";
+          extra =
+            "อายุเป้าหมายที่กำหนดไว้คือ " +
+            formatNumber(targetAge) +
+            " ปี และตอนนี้อายุมากกว่าหรือใกล้เคียงแล้ว";
+        } else {
+          baseMs = remainingMs;
+          label = "เวลาที่ยังเหลือก่อนถึงอายุประมาณ " + formatNumber(targetAge) + " ปี คือ";
+          const yearsLeft = remainingMs / MS_YEAR;
+          extra =
+            "ถ้าคิดเป็นปีแบบคร่าว ๆ เหลืออีกประมาณ " +
+            formatNumber(yearsLeft) +
+            " ปี (ค่าเฉลี่ย)";
+        }
       }
 
-      if (activity === "low") {
-        tips.push("จากที่คุณเลือกว่าชีวิตประจำวันค่อนข้างนั่งนิ่ง ลองเริ่มจากการเดินให้ได้วันละ 20–30 นาที แล้วค่อยเพิ่มเวลา.");
-      } else if (activity === "medium") {
-        tips.push("คุณมีการเคลื่อนไหวระดับปานกลาง ลองเพิ่มความหนักขึ้นเล็กน้อย เช่น เดินเร็วขึ้น หรือเพิ่มวันออกกำลังกายอีก 1 วันต่อสัปดาห์.");
-      } else if (activity === "high") {
-        tips.push("คุณออกกำลังกายค่อนข้างดีอยู่แล้ว อย่าลืมมีวันพัก และเน้นโภชนาการที่สมดุลเพื่อให้ร่างกายฟื้นตัว.");
+      let value;
+      let unitLabel;
+
+      switch (unit) {
+        case "years":
+          value = baseMs / MS_YEAR;
+          unitLabel = "ปี";
+          break;
+        case "days":
+          value = baseMs / MS_DAY;
+          unitLabel = "วัน";
+          break;
+        case "hours":
+          value = baseMs / MS_HOUR;
+          unitLabel = "ชั่วโมง";
+          break;
+        case "minutes":
+          value = baseMs / MS_MINUTE;
+          unitLabel = "นาที";
+          break;
+        case "seconds":
+        default:
+          value = baseMs / MS_SECOND;
+          unitLabel = "วินาที";
+          break;
       }
 
-      const listHtml = tips.map(t => `<li>${t}</li>`).join("");
-      return `<ul>${listHtml}</ul>`;
-    }
-
-    function updateScaleMarker(bmi) {
-      // scale 0–35+ map to 0–100%
-      const maxBMI = 35;
-      const clamped = Math.max(0, Math.min(bmi, maxBMI));
-      const percent = (clamped / maxBMI) * 100;
-      markerEl.style.left = percent + "%";
-    }
-
-    function calculateBMI() {
-      errorEl.textContent = "";
-
-      const height = parseFloat(heightInput.value);
-      const weight = parseFloat(weightInput.value);
-
-      if (isNaN(height) || height <= 0) {
-        errorEl.textContent = "กรุณากรอกส่วนสูงให้ถูกต้อง (หน่วยเซนติเมตร)";
-        return;
-      }
-      if (isNaN(weight) || weight <= 0) {
-        errorEl.textContent = "กรุณากรอกน้ำหนักให้ถูกต้อง (หน่วยกิโลกรัม)";
-        return;
-      }
-
-      if (height < 100 || height > 250) {
-        errorEl.textContent = "ส่วนสูงอยู่นอกช่วงที่รองรับ (100–250 ซม.)";
-        return;
-      }
-      if (weight < 20 || weight > 250) {
-        errorEl.textContent = "น้ำหนักอยู่นอกช่วงที่รองรับ (20–250 กก.)";
-        return;
-      }
-
-      const heightM = height / 100;
-      const bmi = weight / (heightM * heightM);
-      const bmiRounded = parseFloat(bmi.toFixed(1));
-      const category = getBMICategory(bmi);
-      const activity = activitySelect.value;
-
-      // Update UI
-      bmiValueEl.textContent = `BMI = ${formatNumber(bmiRounded, 1)}`;
-      bmiLabelEl.textContent = `จากส่วนสูง ${formatNumber(height, 0)} ซม. และน้ำหนัก ${formatNumber(weight, 1)} กก.`;
-      bmiStatusEl.innerHTML = `ระดับน้ำหนักของคุณคือ <span>${category.text}</span>`;
-      bmiStatusEl.style.color = category.color;
-
-      badgeEl.textContent = "ผลการประเมินตามเกณฑ์ BMI สำหรับคนไทย";
-      badgeEl.style.borderColor = category.color;
-      badgeEl.style.color = "#ecfdf5";
-
-      adviceEl.innerHTML = createAdvice(category.key, activity);
-
-      updateScaleMarker(bmi);
-    }
-
-    function resetForm() {
-      heightInput.value = "";
-      weightInput.value = "";
-      activitySelect.value = "medium";
-      errorEl.textContent = "";
-
-      badgeEl.textContent = "กรอกข้อมูลแล้วกด “คำนวณ BMI”";
-      badgeEl.style.borderColor = "rgba(16,185,129,0.9)";
-      bmiValueEl.textContent = "--";
-      bmiLabelEl.textContent = "ยังไม่มีการคำนวณ";
-      bmiStatusEl.textContent = "";
-      bmiStatusEl.style.color = "#ecfdf3";
-      adviceEl.innerHTML = "เมื่อคำนวณแล้ว ระบบจะแสดงคำแนะนำเบื้องต้นตามระดับ BMI และระดับการเคลื่อนไหวของคุณ";
-      updateScaleMarker(0);
-    }
-
-    calcBtn.addEventListener("click", calculateBMI);
-    resetBtn.addEventListener("click", resetForm);
-
-    // กด Enter ในช่องใดช่องหนึ่งให้คำนวณเลย
-    heightInput.addEventListener("keyup", (e) => {
-      if (e.key === "Enter") calculateBMI();
-    });
-    weightInput.addEventListener("keyup", (e) => {
-      if (e.key === "Enter") calculateBMI();
+      resultLabelEl.textContent = label;
+      resultValueEl.textContent = formatNumber(value) + " " + unitLabel;
+      resultExtraEl.textContent = extra;
     });
 
-    // เริ่มต้น marker ที่ซ้ายสุด
-    updateScaleMarker(0);
+    clearBtn.addEventListener("click", () => {
+      dobInput.value = "";
+      targetAgeInput.value = "80";
+      unitSelect.value = "years";
+      errorEl.textContent = "";
+      resultLabelEl.textContent = "ยังไม่มีการคำนวณ";
+      resultValueEl.textContent = "--";
+      resultExtraEl.textContent = "กรอกข้อมูลด้านซ้ายแล้วกดปุ่ม \"คำนวณ\" เพื่อดูผล";
+    });
   </script>
 </body>
 </html>
